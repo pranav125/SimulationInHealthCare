@@ -1,0 +1,13 @@
+{
+    "genders":
+        [
+            {
+                "gender" : "Male",
+                "count" : 40
+            },
+            {
+                "gender" : "Female",
+                 "count" : 60
+            }
+        ]
+}

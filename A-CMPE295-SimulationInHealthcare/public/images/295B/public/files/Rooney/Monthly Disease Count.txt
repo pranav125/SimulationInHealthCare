@@ -1,0 +1,53 @@
+{
+    "monthlyDiseaseCount":
+        [
+            {
+                "month" : "Jan",
+                "count" : 746
+            },
+            {
+                "month" : "Feb",
+                 "count" : 432
+            },
+            {
+                "month" : "Mar",
+                "count" : 352
+            },
+            {
+                "month" : "Apr",
+                 "count" : 589
+            },
+            {
+                "month" : "May",
+                "count" : 763
+            },
+            {
+                "month" : "Jun",
+                 "count" : 1038
+            },
+            {
+                "month" : "Jul",
+                "count" : 983
+            },
+            {
+                "month" : "Aug",
+                 "count" : 843
+            },
+            {
+                "month" : "Sep",
+                "count" : 659
+            },
+            {
+                "month" : "Oct",
+                 "count" : 653
+            },
+            {
+                "month" : "Nov",
+                "count" : 539
+            },
+            {
+                "month" : "Dec",
+                 "count" : 409
+            }
+        ]
+}

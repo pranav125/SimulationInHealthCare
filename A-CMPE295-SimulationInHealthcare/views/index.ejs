@@ -1,0 +1,442 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Simulation Technology in Healthcare</title>
+		<link href="/css/style.css" rel="stylesheet" type="text/css"  media="all" />
+		<link href='http://fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="css/responsiveslides.css">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		<script src="js/responsiveslides.min.js"></script>
+		<script src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+	    <script src="http://code.highcharts.com/maps/modules/map.js"></script>
+	    <script src="https://code.highcharts.com/maps/modules/data.js"></script>
+	    <script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
+	    <script src="https://code.highcharts.com/mapdata/custom/world-highres3.js"></script>
+		  
+		<script>
+        // You can also use "$(window).load(function() {"
+        $(function () {
+
+            // Slideshow 1
+            $("#slider1").responsiveSlides({
+                maxwidth: 1600,
+                speed: 600
+            });
+        });
+    </script>
+
+    <script>
+        $(function () {
+            $('#container1').highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Leading Causes of Deaths in USA between 2005-2015'
+                },
+                credits: false,
+                exporting: { enabled: false },
+                xAxis: {
+                    categories: [
+                        'Heart Disorder',
+                        'Influenza',
+                        'Respiratory Disorder',
+                        "Alzheimer's Disease",
+                        'Diabetes',
+                        'Cancer'
+                    ],
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Deaths'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Deaths',
+                    data: [6111, 1569, 2920, 847, 4551, 9848]
+
+                }]
+            });
+        });
+    </script>
+
+    <script>
+        $(function () {
+            $('#container2').highcharts({
+                chart: {
+                    type: 'pie',
+                    options3d: {
+                        enabled: true,
+                        alpha: 45
+                    }
+                },
+                title: {
+                    text: 'Obesity in US in 2012'
+                },
+                credits: false,
+                exporting: { enabled: false },
+                plotOptions: {
+                    pie: {
+                        innerSize: 100,
+                        depth: 45
+                    }
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                series: [{
+                    name: 'Percent',
+                    data: [
+                        ['Adults', 68.6], ['Teens', 31.4]
+                    ]
+                }]
+            });
+        });
+    </script>
+
+    <script>
+        $(function () {
+
+            $.getJSON('./JSON/us statewise diabetes count 2014.json', function (data) {
+
+                // Make codes uppercase to match the map data
+                $.each(data, function () {
+                    this.code = this.code.toUpperCase();
+                });
+
+                // Instanciate the map
+                $('#container3').highcharts('Map', {
+
+                    chart : {
+                        borderWidth : 1
+                    },
+
+                    title : {
+                        text : 'US Statewise Diabetes Count 2014(%)'
+                    },
+                    exporting: { enabled: false },
+                    legend: {
+                        layout: 'horizontal',
+                        borderWidth: 0,
+                        backgroundColor: 'rgba(255,255,255,0.85)',
+                        floating: true,
+                        verticalAlign: 'top',
+                        y: 25
+                    },
+
+                    mapNavigation: {
+                        enabled: true
+                    },
+
+                    colorAxis: {
+                        min: 1,
+                        type: 'logarithmic',
+                        minColor: '#EEEEFF',
+                        maxColor: '#000022',
+                        stops: [
+                            [0, '#EFEFFF'],
+                            [0.67, '#4444FF'],
+                            [1, '#000022']
+                        ]
+                    },
+
+                    series : [{
+                        animation: {
+                            duration: 1000
+                        },
+                        data : data,
+                        mapData: Highcharts.maps['countries/us/us-all'],
+                        joinBy: ['postal-code', 'code'],
+                        dataLabels: {
+                            enabled: true,
+                            color: '#FFFFFF',
+                            format: '{point.code}'
+                        },
+                        name: 'Percent of Diabetes Patients',
+                        tooltip: {
+                            pointFormat: '{point.code}: {point.value}%'
+                        }
+                    }]
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(function () {
+
+            $.getJSON('./JSON/us statewise new cancer cases count 2015.json', function (data) {
+
+                // Make codes uppercase to match the map data
+                $.each(data, function () {
+                    this.code = this.code.toUpperCase();
+                });
+
+                // Instanciate the map
+                $('#container4').highcharts('Map', {
+
+                    chart : {
+                        borderWidth : 1
+                    },
+
+                    title : {
+                        text : 'US Statewise Cancer Cases between 1995-2015'
+                    },
+                    exporting: { enabled: false },
+                    legend: {
+                        layout: 'horizontal',
+                        borderWidth: 0,
+                        backgroundColor: 'rgba(255,255,255,0.85)',
+                        floating: true,
+                        verticalAlign: 'top',
+                        y: 25
+                    },
+
+                    mapNavigation: {
+                        enabled: true
+                    },
+
+                    colorAxis: {
+                        min: 1,
+                        type: 'logarithmic',
+                        minColor: '#ff4d4d',
+                        maxColor: '#7f0000',
+                        stops: [
+                            [0, '#ff4d4d'],
+                            [0.67, '#ff0000'],
+                            [1, '#7f0000']
+                        ]
+                    },
+
+                    series : [{
+                        animation: {
+                            duration: 1000
+                        },
+                        data : data,
+                        mapData: Highcharts.maps['countries/us/us-all'],
+                        joinBy: ['postal-code', 'code'],
+                        dataLabels: {
+                            enabled: true,
+                            color: '#FFFFFF',
+                            format: '{point.code}'
+                        },
+                        name: 'New Cancer Cases',
+                        tooltip: {
+                            pointFormat: '{point.code}: {point.value}'
+                        }
+                    }]
+                });
+            });
+        });
+    </script>
+    <style>
+
+        #nav {
+            line-height:30px;
+            background-color:#eeeeee;
+            height:300px;
+            width:100px;
+            float:left;
+            padding:5px;
+        }
+
+
+        .container {
+            width: 100%;
+            background: #eee;
+            margin: 10px auto;
+            position: relative;
+            text-align:center;
+        }
+
+        .block {
+            background: green;
+            height: 400px;
+            width: 500px;
+            display:inline-block;
+            margin: 10px;
+        }
+
+        .block1 {
+            background: white;
+            height: 300px;
+            width: 250px;
+            display:inline-block;
+            margin: 10px;
+        }
+
+    </style>
+
+
+
+	</head>
+	<body>
+		<!--start-wrap-->
+		
+			<!--start-header-->
+			<div class="header">
+				<div class="wrap">
+				<!--start-logo-->
+				<div class="logo">
+					<a href="/"><img src="images/mainLogo140x140.png" title="logo" /></a>
+				</div>
+				<!--end-logo-->
+				<!--start-top-nav-->
+				<div class="top-nav">
+					<ul>
+						<li class="active"><a href="index.html">Home</a></li>
+						<li><a href="/about">About</a></li>
+						<li><a href="/services">services</a></li>
+						<li><a href="/blogs">blog</a></li>
+						<li><a href="/contacts">contact</a></li>
+					</ul>					
+				</div>
+				<div class="clear"> </div>
+				<!--end-top-nav-->
+			</div>
+			<!--end-header-->
+		</div>
+		<div class="clear"> </div>
+			<!--start-image-slider---->
+					<div class="image-slider">
+						<!-- Slideshow 1 -->
+					    <ul class="rslides" id="slider1">
+					      <li><img src="images/slider-image1.jpg" alt=""></li>
+					      <li><img src="images/newDoctorImg1200x450.png" alt=""></li>
+					      <li><img src="images/nurse_anesthesia_operating_room_simulation1200x450.png" alt=""></li>
+					      <li><img src="images/wpk_281200x450.jpg" alt=""></li>
+					      <li><img src="images/slider-image1.jpg" alt=""></li>
+					    </ul>
+						 <!-- Slideshow 2 -->
+					</div>
+					<!--End-image-slider---->
+		    <div class="clear"> </div>
+		    <div class="content-grids">
+		    	<div class="wrap">
+		    	<div class="section group">
+				<div class="listview_1_of_3 images_1_of_3">
+					<div class="listimg listimg_1_of_2">
+						  <img src="images/grid-img1.png">
+					</div>
+					<div class="text list_1_of_2">
+						  <a href="/Doctor_SignInSignUp"><h3>Doctor Login</h3></a>
+						  <div class="button"><span><a href="/Doctor_SignInSignUp">SignIn/SignUp</a></span></div>
+					</div>
+				</div>				
+				<div class="listview_1_of_3 images_1_of_3">
+					<div class="listimg listimg_1_of_2">
+						  <img src="images/grid-img1.png">
+					</div>
+					<div class="text list_1_of_2">
+					<a href="/Patient_SignInSignUp"><h3>Patient Login</h3></a>
+						  <div class="button"><span><a href="/Patient_SignInSignUp">SignIn/SignUp</a></span></div>
+				     </div>
+				</div>				
+				<div class="listview_1_of_3 images_1_of_3">
+					<div class="listimg listimg_1_of_2">
+						  <img src="images/grid-img3.png">
+					</div>
+					<div class="text list_1_of_2">
+						  <a href="/about"><h3>Know us more</h3></a>
+						  <div class="button"><span><a href="/about"></a></span></div>
+				    </div>
+				</div>				
+			</div>
+		    </div>
+		   </div>
+		  <!--  <div class="wrap">
+		   <div class="content-box">
+		   <div class="section group">
+				<div class="col_1_of_3 span_1_of_3 frist">
+					<h3>Dedicated Staff</h3>
+					<img src="images/box-img1.jpg" title="staff" />
+					<span>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</span>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+					<a href="#">Readmore</a>
+				</div>
+				<div class="col_1_of_3 span_1_of_3 second" id="container"> -->
+				<!-- <div class="col_1_of_3 span_1_of_3 second">
+					<h3>Candidates</h3>
+					<span>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</span>
+					<p>exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor pariatur.</p>
+					<ul>
+						<li><a href="#"><img src="images/arrow.png">Primary Care Directory</a></li>
+						<li><a href="#"><img src="images/arrow.png">Medical Fee Waiving Mechanism</a></li>
+						<li><a href="#"><img src="images/arrow.png">Health Care Voucher</a></li>
+						<li><a href="#"><img src="images/arrow.png">reprehenderit in voluptate</a></li>
+						<li><a href="#"><img src="images/arrow.png">laboris nisi ut aliquip ex ean</a></li>
+						<li><a href="#"><img src="images/arrow.png">aboris nisi ut aliquip</a></li>
+						<li><a href="#"><img src="images/arrow.png">Duis aute irure dolor </a></li>
+						<li><a href="#"><img src="images/arrow.png">adipisicing elit, sed do</a></li>
+						<li><a href="#"><img src="images/arrow.png">Ut enim ad minim veniam</a></li>
+						<li><a href="#"><img src="images/arrow.png">Primary Care Directory</a></li>
+						<li><a href="#"><img src="images/arrow.png">Medical Fee Waiving Mechanism</a></li>
+					</ul>
+				</div> -->
+				
+
+				<!-- <div class="col_1_of_3 span_1_of_3 frist">
+					<h3>Quality Service</h3>
+					<img src="images/box-img2.jpg" title="staff" />
+					<span>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</span>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+					<a href="#">Readmore</a>
+				</div> -->
+			<!-- </div>
+		   </div>
+		   </div> -->
+		   
+		   <div class="container">
+				<div class="block" id="container1"></div><!--
+					        --><div class="block" id="container2"></div>
+					       <!--  <div class="block1"><a class="twitter-timeline" href="https://twitter.com/HealthySim" data-widget-id="728335299130970112">Tweets by @HealthySim</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
+			 -->
+			
+			    <div class="block" id="container3"></div><!--
+					        --><div class="block" id="container4"></div><!--
+					        --> <!-- <div class="block1"></div> -->
+			</div>
+		   
+		   <div class="clear"> </div>
+   			<div class="footer">
+		   	 <div class="wrap">
+		   	<div class="footer-left">
+		   			<ul>
+						<li><a href="/">Home</a></li>
+						<li><a href="/about">About</a></li>
+						<li><a href="/services">services</a></li>
+						<li><a href="/blogs">blog</a></li>
+						<li><a href="/contacts">contact</a></li>
+					</ul>
+		   	</div>
+		   	<div class="footer-right">
+		   		<p>MediCo | Design By MediCo</p>
+		   	</div>
+		   	<div class="clear"> </div>
+		   </div>
+		   </div>
+		<!--end-wrap-->
+	</body>
+</html>

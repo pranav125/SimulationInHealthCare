@@ -1,0 +1,29 @@
+{
+    "ages":
+        [
+            {
+                "age_group" : "1-15",
+                "count" : 5
+            },
+            {
+                "age_group" : "16-30",
+                "count" : 14
+            },
+            {
+                "age_group" : "31-45",
+                "count" : 20
+            },
+            {
+                "age_group" : "46-60",
+                "count" : 40
+            },
+            {
+                "age_group" : "61-80",
+                "count" : 45
+            },
+            {
+                "age_group" : "81-99",
+                "count" : 30
+            }
+        ]
+}
