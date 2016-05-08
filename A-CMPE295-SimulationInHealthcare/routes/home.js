@@ -8,6 +8,7 @@ var fs = require('fs');
 var emailDoctorGlobal = '';
 var firstnamepatientglobal ='';
 var lastnamepatientglobal ='';
+var patientName='';
 //var mysql = require('./PoolManager.js');
 
 exports.showPatientNames = function(req, res){
@@ -291,20 +292,7 @@ function UpdateDoctorCommentsAndPrescription(req,res){
 						//console.log(req.session.email);
 						console.log("valid Login");
 						 res.render('SearchPatient', { title: 'Simulation In Healthcare' });
-//						res.render('SearchPatient', {
-//							results : results
-//						}, function(err, result) {
-//							// render on success
-//							if (!err) {
-//								res.end(results);
-//							}
-//							// render or error
-//							else {
-//								
-//								console.log(err);
-//								res.end('An error occurred');
-//							}
-//						});
+
 					}
 				}, getUser);
 
@@ -363,438 +351,7 @@ function logout(req,res){
 				}
 		     }
 				        },getUser1);
-				        
-//		req.session.destroy(function(err){
-//       if(err){
-//               console.log(err);
-//              }
-//       else
-//       {
-//    	   res.render('index', { title: "World's Largest Professional Network | LinkedIn"});
-//    	   req.session.reset();
-//       }
-//      });
-
-
-}
-
-function editProfile(req,res){
-	
-		if(req.session.email){
-        	 console.log(req.session.email);
-        var getUser2 = "select * from user_details d, user_profile p WHERE d.uid = p.user_id and email='"+req.session.email+"'" ;
-        
-     
-     mysql.fetchData(function(err,results){
-    	
-        if(err){
-    	  throw err;	
-    	  }
-    	
-    	else{
-    		if(results.length > 0){
-    			console.log(results);
-    			res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-    		  	res.render('editProfile.ejs',{results:results, title:"World's Largest Professional Network | LinkedIn"},function(err,result){
-    		  	   
-    		  	if(!err){
-    		  		  res.end(result);   
-    		  	   }
-    		  	  
-    		  	   else{
-    		  		 res.end("An error occurred");
-    		  		
-    		  		 console.log(err);
-    		  	   }
-    		  	 });	  	
-    		}	
-    	}   		
-     },getUser2);
-     
-      }
-            else{
-             res.render('index.ejs');	
-            }
-            
- }
-
- 
-function updateProfile(req,res){
-	
-	if(req.session.email){
-    	   console.log(req.session.email);
-    var newconnection = mysql.getConnection();
-//   console.log(req);
-	var input = JSON.parse(JSON.stringify(req.body));
-	console.log("asdasdasdasdasdasdasd\n" + input);
-	var currentdate = new Date();
-	
-	var data = {
-	     
-		  "summary" : input.summary,
-		   "education" : input.education,
-		   "skills" : input.skills,
-		   "experience" : input.experience,
-		   };
-	 
-//		   var post={
-//		       //email : input.email,
-//		        email : req.session.email,
-//		   };
-		   
-		   
-       console.log(input);
-
-       console.log(req);
-//       var query = newconnection.query("UPDATE user_profile set ? WHERE user_id IN (select uid from user_details where email="+ input.email  , data ,
-   	
-       
-    var query = newconnection.query("update user_profile p JOIN user_details d ON (p.user_id='" +req.session.uid+"') SET ?", data ,
-       function(err, result) {
-	var getUser3 = "select  * from user_profile p, user_details d  where d.uid = p.user_id and summary = '"+ data.summary + "' and education = '"+ data.education + "' and skills = '"+ data.skills + "' and experience = '"+ data.experience + "'";
-
-				console.log(getUser3);
-				console.log("update:" +query);
-				mysql.fetchData(function(err, results) {
-					if (err) {
-						throw err;
-					} else {
-						console.log(results);
-						var summary = req.body.summary;
-						var education = req.body.education;
-						var skills = req.body.skills;
-						//console.log("Pasword length:" + password.length);
-						var experience = req.body.experience;
-					}
-					if (results.length > 0) {
-						req.session.email = results[0].email;
-						   console.log(req.session.email);
-						console.log("valid Login");
-						ejs.renderFile('./views/afterSignin.ejs', {
-							results : results
-						}, function(err, result) {
-							// render on success
-							if (!err) {
-								res.end(result);
-							}
-							// render or error
-							else {
-								
-								console.log(err);
-								res.end('An error occurred');
-							}
-						});
-					}
-				}, getUser3);
-			});
-		 }
-         else{
-          res.render('index.ejs');	
-         }
-     
- }
-
-//function search(req, res){
-//	
-//   var newconnection = mysql.getConnection();
-//
-//   newconnection.query("select firstname from user_details",
-//	   mysql.fetchData(function(err,rows,fields){
-//       if(err) {throw err;}
-//        res.end(JSON.stringify(rows));
-//     }));
-//}
-
-//exports.search = search;
-
-
-function afterconnections(req, res) {
-	if (req.session.email) {
-		console.log(req.session.email);
-		var newconnection = mysql.getConnection();
-		var input = JSON.parse(JSON.stringify(req.body));
-		emailGlobal	=input.email;	
-		console.log(input.email);
-		if (typeof input.email !== 'undefined') {
-			var data = {
-				"email": input.email
-			};
-			//newconnection.query("Insert INTO connections(uid,email) Select uid,email from user_details where email='" + data.email + "'");
-			
-   
-            // var getUser2 = "select * from user_details d, user_profile p WHERE d.uid = p.user_id and email='"+req.session.email+"'" ;
-            var getUser2 = "select * from user_details where email ='" + data.email + "'";
-
-            mysql.fetchData(function (err, results) {
-                if (err) {
-                    throw err;
-                } else {
-					if (results.length > 0) {
-						console.log("inside the coonection:"+results[0].email);
-						//res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-//						<!--res.render('connections.ejs', {
-	//					results: results, title: "World's Largest Professional Network | LinkedIn"
-		//				} -->
-						
-//						res.render('afterconnections.ejs' ,{
-//							
-//							results : results
-//						}, function (err, result) {
-//
-//							if (!err) {
-//								res.end(result);
-//							} else {
-//								res.end("An error occurred");
-//								console.log(err);
-//							}
-//						});
-	res.render('afterconnections.ejs',{results:results, title:"World's Largest Professional Network | LinkedIn"},function(err,result){
-	  	   
-	if(!err){
-		  res.end(result);   
-	   }
-	  
-	   else{
-		 res.end("An error occurred");
-		
-		 console.log(err);
-	   }
-	 });
-					}
-                }
-                }, getUser2);
-        }
-        else {
-            res.render('connections.ejs', {
-                title: "LinkedIn"
-            });           
-        	}
-		}
-		
-		else {
-            res.render('index.ejs');
-        }
-}          
-
-function connections(req,res) {
-	if(req.session.email){
-		
-	ejs.renderFile('./views/connections.ejs',{title:"LinkedIn"},function(err, result) {
-	   // render on success
-	   if (!err) {
-	            res.end(result);
-	   }
-	   // render or error
-	   else {
-	            res.end('An error occurred');
-	            console.log(err);
-	   }
-   });
-	   }
-	   else{
-		 res.render("index.ejs");   
-	   }
-	   
-
-}
-
-function afterconnectionsAction(req, res) {
-	var newconnection = mysql.getConnection();
-           if(req.session.email){
-
-			console.log(req.session.email);
-			//console.log(req);
-			var id = req.session.uid;
-			var email= req.session.email;
-			console.log("global email value is :"+emailGlobal);
-			//var getUser2 = "select * from user_details d, user_profile p WHERE d.uid = p.user_id and email='"+req.session.email+"'" ;
-			var data = {
-			      uid  : req.session.uid,
-			     email : emailGlobal,
-			      isConnected : 0
-			  };
-			console.log(data.uid);
-			console.log(data.email);
-			console.log(data.isConnected);
-			//var getUser2 = ('INSERT INTO connections SET ?', data);
-			//var query = newconnection.query("Insert INTO connections(uid,email,isConnected) Values(" +data.uid+ ",'" +data.email+ "'," +data.isConnected+ "",function(err, result) {
-				var query = newconnection.query("Insert INTO connections SET ?", data ,function(err, result) { 
-			var getUser2 = "Select email from connections where email='"+data.email+"'";
-			
-			 console.log("QUERY:"+getUser2);
-			
-			mysql.fetchData(function(err,results){
-	
-				if(err){
-					throw err;	
-				}
-	
-				else{
-					if(results.length > 0){
-						console.log(results);
-						
-						res.render('afterconnectionsAction.ejs',{results:results, title:"World's Largest Professional Network | LinkedIn"},function(err,result){
-		  	   
-							if(!err){
-				
-							res.end(result);   
-							}
-		  	  
-							else{
-								res.end("An error occurred");
-		  		
-								console.log(err);
-								}
-		  	 });	  	
-		}	
-	}   		
-},getUser2);
-							});
- }
-       else{
-        res.render('index.ejs');	
-       }
-       
-}         
-
-function showconnections(req,res){
-	
-		if(req.session.email){
-        	 console.log(req.session.email);
-        var getUser2 = "select * from user_details where uid IN (Select uid from connections where email='"+req.session.email+"' and isConnected='1')";
-        
-     
-        mysql.fetchData(function(err,results){
-    	
-        	if(err){
-        		throw err;	
-        	}
-    	
-        	else{
-        		if(results.length > 0){
-    			console.log(results);
-    			
-    		  	res.render('showconnections.ejs',{results:results, title:"World's Largest Professional Network | LinkedIn"},function(err,result){
-    		  	   
-    		  	if(!err){
-    		  		  res.end(result);   
-    		  	   }
-    		  	  
-    		  	   else{
-    		  		 res.end("An error occurred");
-    		  		
-    		  		 console.log(err);
-    		  	   }
-    		  	 });	  	
-    		}	
-    	}   		
-     },getUser2);
-     
-      }
-            else{
-             res.render('index.ejs');	
-            }
-            
- }
-
- function pendingRequests(req,res){
-	
-		if(req.session.email){
-        	 console.log(req.session.email);
-        	 
-        //var getUser2 = "select * from user_details d, user_profile p WHERE d.uid = p.user_id and email='"+req.session.email+"'" ;
-     //   var getUser2 = "Select * from connections where uid='"+req.session.uid+"'";
-     var getUser2 = "Select * from user_details where uid IN (Select uid from connections where email='"+req.session.email+"')";
-     mysql.fetchData(function(err,results){
-    	
-        if(err){
-    	  throw err;	
-    	  }
-    	
-    	else{
-    		if(results.length > 0){
-    			console.log(results);
-    			
-    		  	res.render('pendingRequests.ejs',{results:results, title:"World's Largest Professional Network | LinkedIn"},function(err,result){
-    		  	   
-    		  	if(!err){
-    		  		  res.end(result);   
-    		  	   }
-    		  	  
-    		  	   else{
-    		  		 res.end("An error occurred");
-    		  		
-    		  		 console.log(err);
-    		  	   }
-    		  	 });	  	
-    		}	
-    	}   		
-     },getUser2);
-     
-      }
-            else{
-             res.render('index.ejs');	
-            }
-            
- }
-
-function acceptedRequest(req, res) {
-	var newconnection = mysql.getConnection();
-           if(req.session.email){
-
-        	console.log(req.session.email);
-			//console.log(req);
-			//var id = req.session.uid;
-			//var email= req.session.email;
-			console.log("global email value is :"+emailGlobal);
-			//var getUser2 = "select * from user_details d, user_profile p WHERE d.uid = p.user_id and email='"+req.session.email+"'" ;
-			var data = {
-			      uid  : req.session.uid,
-			     email : emailGlobal,
-			      isConnected : 0
-			  };
-			console.log(data.uid);
-			console.log(data.email);
-			console.log(data.isConnected);
-			//var getUser2 = ('INSERT INTO connections SET ?', data);
-			//var query = newconnection.query("Insert INTO connections(uid,email,isConnected) Values(" +data.uid+ ",'" +data.email+ "'," +data.isConnected+ "",function(err, result) {
-				var query = newconnection.query("Update connections SET isConnected= 1", data ,function(err, result) { 
-			var getUser2 = "Select * from user_details where uid IN (Select uid from connections where email='"+req.session.email+"')";
-			
-			 console.log("QUERY:"+getUser2);
-			
-			mysql.fetchData(function(err,results){
-	
-				if(err){
-					throw err;	
-				}
-	
-				else{
-					if(results.length > 0){
-						console.log(results);
-						
-						res.render('acceptedRequest.ejs',{results:results, title:"World's Largest Professional Network | LinkedIn"},function(err,result){
-		  	   
-							if(!err){
-								res.end(result);   
-							}
-		  	  
-							else{
-								res.end("An error occurred");
-		  		
-								console.log(err);
-								}
-		  	 });	  	
-		}	
-	}   		
-},getUser2);
-							});
- }
-       else{
-        res.render('index.ejs');	
-       }
-       
-}         
+				        }
 
 function doctorHome(req, res) {
 	if(req.session.email){
@@ -813,14 +370,7 @@ function doctorHome(req, res) {
 	
      //var sess;
 	var newconnection = mysql.getConnection();
-	//var input = JSON.parse(JSON.stringify(req.body));
-	//emailDoctorGlobal = input.email;
-	//var currentdate = new Date();
-//	console.log(input);
-//	console.log (input.email);
-//	console.log (input.password);
-	//var email = req.param("email");
-	//var password = req.param("password");
+
 	
 	
 				
@@ -893,19 +443,113 @@ function doctorHome(req, res) {
 							}
 }
 
+function orderTest(req,res){
+	
+	if(req.session.email){
+	var newconnection = mysql.getConnection();
+	 var getUser1="SELECT * FROM patientrecords JOIN doctor ON (patientrecords.DOCTORID = doctor.doctor_id) where doctor.email ='"+req.session.email+"'";
+		
+	 mysql.fetchData(function(err,results){
+			if(err){
+				throw err;
+			}
+			else 
+			{
+				if(results.length > 0){
+					
+					console.log(req.session.email);
+					//console.log("valid Login");
+					//res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+					//req.session = null;
+					//req.session.destroy();
+					//req.session.reset();
+					
+					//res.redirect('/');
+					
+					
+				res.render('orderTest.ejs',{results:results, title:"Simulation In Healthcare"},function(err, result) {
+				        // render on success
+				        if (!err) {
+				        	
+				            res.end(result);
+				        }
+				        // render or error
+				        else {
+				            res.end('An error occurred');
+				            console.log(err);
+				        }
+				    });
+				}
+		     }
+				        },getUser1);
+	 }
+	}
 
+	
+function orderTestReport(req, res){
+	if(req.session.email){
+		var newconnection = mysql.getConnection();
+		var input = JSON.parse(JSON.stringify(req.body));
+		console.log("asdasdasdasdasdasdasd\n" + input);
+		//var currentdate = new Date();
+		
+		var data = {
+			  "testName" : input.field1,
+			  "patientName" : input.field2,
+			  "age" : input.age,
+			  "gender" : input.gender,
+			  "Pathologist" : input.Pathologist,
+			  "Diagnosis" : input.Diagnosis,
+			  "Specifcations" : input.Specifications
+			  };
+		
+
+		
+				var query = newconnection.query("select doctor_id from doctor where email='"+req.session.email+"'",
+				function(err, result) {
+					//newconnection.query("Insert INTO user_profile(user_id) Select uid from user_details where email='"+ data.email + "'");
+					var input2 = JSON.parse(JSON.stringify(result));
+					//console.log(input2[0].doctor_id);
+					var getUser = "Insert INTO ordertestreport (testName, patientName,age,gender,Pathologist,Diagnosis,Specifcations,doctorName) values ('"+data.testName+"','"+data.patientName+"','"+data.age+"','"+data.gender+"','"+ data.Pathologist+"','"+ data.Diagnosis+"','"+ data.Specifcations+"','"+ req.session.email+"')";			
+					var getUser1 = "Select * from ordertestreport where testName ='"+data.testName+"' and patientName='"+data.patientName +"'and DOCTORID='"+ input2[0].doctor_id+"'";
+					console.log(getUser);
+					
+					mysql.fetchData(function(err, results) {
+						var insertionresult = JSON.parse(JSON.stringify(results));
+						console.log("inside fetchdata");
+						console.log(insertionresult.affectedRows);
+						if (err) {
+							throw err;
+						} else {
+							console.log(results);
+						}
+						if (insertionresult.affectedRows > 0) {
+							console.log("HEUUUU");
+						    //req.session.email = results[0].email;
+							//console.log(req.session.email);
+							console.log("valid Login");
+							 res.render('orderTest', { title: 'Simulation In Healthcare' });
+
+						}
+					}, getUser);
+
+								});	
+				
+					
+					
+		
+	}
+	
+
+}
+
+exports.orderTestReport = orderTestReport;
+exports.orderTest = orderTest;
 exports.doctorHome = doctorHome;
-exports.acceptedRequest = acceptedRequest;
-exports.pendingRequests = pendingRequests;
-exports.showconnections = showconnections;
-exports.afterconnectionsAction = afterconnectionsAction;
-exports.afterconnections=afterconnections;
-exports.connections = connections;
 exports.afterDoctorSignUp = afterDoctorSignUp;
 exports.afterDoctorSignIn = afterDoctorSignIn;
 exports.SearchPatient = SearchPatient;
 exports.UpdateDoctorCommentsAndPrescription = UpdateDoctorCommentsAndPrescription;
 exports.logout = logout;
-exports.editProfile = editProfile;
-exports.updateProfile = updateProfile;
+
 

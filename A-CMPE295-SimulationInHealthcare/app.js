@@ -55,7 +55,7 @@ app.get('/blogs', routes.blogs);
 app.get('/contacts', routes.contacts);
 
 //For Doctor...
-
+app.get('/orderTest', home.orderTest);
 app.get('/doctorHome',home.doctorHome);
 app.get('/showPatientNames',home.showPatientNames);
 app.get('/Doctor_SignInSignUp',routes.Doctor_SignInSignUp);
@@ -66,6 +66,7 @@ app.post('/afterDoctorSignUp',home.afterDoctorSignUp);
 app.post('/afterDoctorSignIn',home.afterDoctorSignIn);
 app.post('/SearchPatient', home.SearchPatient);
 app.post('/UpdateDoctorCommentsAndPrescription',home.UpdateDoctorCommentsAndPrescription);
+app.post('/orderTestReport',home.orderTestReport);
 app.post('/logout',home.logout);
 
 

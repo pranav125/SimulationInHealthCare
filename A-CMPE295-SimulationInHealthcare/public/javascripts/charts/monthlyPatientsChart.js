@@ -14,7 +14,7 @@ $(function () {
         exporting: { enabled: false },
 
         title: {
-            text: 'Monthly Patients This Year'
+            text: 'Monthly Patients in Year 2015'
         },
 
         xAxis: {
