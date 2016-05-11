@@ -30,8 +30,9 @@ body{
 	margin:0 auto;
 }
 .header{
+	/* position: fixed;
+	top: 0px; */
 	background:url(../images/header-bg.png);
-	
 }
 .logo{
 	float:left;

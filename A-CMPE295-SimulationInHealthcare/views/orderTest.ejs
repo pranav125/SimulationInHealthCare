@@ -102,7 +102,22 @@
     background-color: #28739E;
 }
 </style>
+	<script>
+	function clicked() {
+		if(document.orderReport.field1.value != "" && document.orderReport.field2.value != "" && document.orderReport.age.value != "" && document.orderReport.gender.value != "" && document.orderReport.Pathologist.value != "" && document.orderReport.Diagnosis.value != ""){
+		document.getElementById('alert').innerHTML += 'Patient Test Details Recorded Successfully!';
+		alert('Successfully Recorded!');
+	       /* if (confirm('Do you want to submit?')) {
+	           yourformelement.submit();
+	           
+	       } else {
+	           return false;
+	       } */
+		}
+	    }
+		
 	
+	</script>
 </head>
 
 <body>
@@ -145,7 +160,7 @@
 		</div>
 		<div class="clear"> </div>
 		
-<form class="form-style-9" method="POST" action="/orderTestReport">
+<form name ="orderReport" class="form-style-9" method="POST" action="/orderTestReport">
 <ul>
 <li>
 	<select name="field1" class="field-style field-split align-left" placeholder="Test Name" required>
@@ -173,9 +188,10 @@
 <textarea name="Specifications" class="field-style" placeholder="Specifications"></textarea>
 </li>
 <li>
-<input type="submit" value="Order Test Report" />
+<input type="submit" onclick="clicked()" value="Order Test Report" />
 </li>
 </ul>
+<div class="alert alert-success" role="alert" id ="alert"></div>
 </form>
 <br><br>
 <div class="clear"> </div>

@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8">
     <title>Sign-Up/Login Form</title>
-    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
-    
+      <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/normalize.css">
 
-    
+    <link rel='stylesheet' href='/css/style.css' />
         <link rel="stylesheet" href="css/style1.css">
 
     <style>
@@ -26,7 +26,36 @@
   </head>
 
   <body>
-<section id="page-top" class="section-style" data-background-image="images/page-top.jpg">
+<!-- <section id="page-top" class="section-style" data-background-image="images/page-top.jpg"> -->
+	<div class="header">
+				<div class="wrap">
+				<!--start-logo-->
+				<div class="logo">
+					<a href="/"><img src="images/mainLogo140x140.png" title="logo" /></a>
+				</div>
+				<!--end-logo-->
+				<!--start-top-nav-->
+				<div class="top-nav">
+					<ul>
+						<li>
+							<form action = "/" method="GET">
+							<button type="submit" class="btn btn-primary" id='afterDoctorSignIn' value="Home">Home</button>
+							</form> 
+						</li>
+						
+							
+						
+						<!-- <li align="right">
+							
+						</li> -->
+					</ul>					
+				</div>
+				<div class="clear"> </div>
+				<!--end-top-nav-->
+			</div>
+			<!--end-header-->
+		</div>
+
     <div class="form">
       
       <ul class="tab-group">
@@ -121,7 +150,7 @@
       </div><!-- tab-content -->
      
 	</div> <!-- /form -->
-</section>
+<!-- </section -->
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 
         <script src="js/index.js"></script>
