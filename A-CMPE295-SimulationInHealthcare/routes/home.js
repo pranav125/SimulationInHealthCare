@@ -49,8 +49,21 @@ function afterDoctorSignUp(req, res) {
 		"first_name" : input.first_name,
 		"last_name" : input.last_name,
 		"email" : input.email,
-		"password" : input.password
+		"password" : input.password,
+		"speciality" : input.specialty
 	};
+	
+	//var input = JSON.parse(JSON.stringify(req.body));
+    var strGender =  './public/files/sample/Gender.txt';
+    var strAge = './public/files/sample/Age Groups.txt';
+    var strMonthlyPatients = './public/files/sample/Monthly Patients Chart.txt';
+    var monthlyDisease = './public/files/sample/Monthly Disease Count.txt';
+    
+    var genderJson = JSON.parse(fs.readFileSync(strGender, 'utf8'));
+    var monthlyPatientsJson = JSON.parse(fs.readFileSync(strMonthlyPatients, 'utf8'));
+    var ageJson = JSON.parse(fs.readFileSync(strAge, 'utf8'));
+    var monthlyDiseaseJson = JSON.parse(fs.readFileSync(monthlyDisease, 'utf8'));
+    
 	var query = newconnection.query('Insert INTO doctor SET ?', data,
 			function(err, result) {
 				//newconnection.query("Insert INTO user_profile(user_id) Select uid from user_details where email='"+ data.email + "'");
@@ -74,8 +87,12 @@ function afterDoctorSignUp(req, res) {
 					    //req.session.email = results[0].email;
 						//console.log(req.session.email);
 						console.log("valid Login");
-						ejs.renderFile('./views/afterDoctorSignin.ejs', {
-							results : results
+						ejs.renderFile('./views/DoctorHomePage.ejs', {
+							results : results,
+							genderJson: genderJson,
+							monthlyPatientsJson: monthlyPatientsJson,
+							ageJson: ageJson,
+							monthlyDiseaseJson: monthlyDiseaseJson
 						}, function(err, result) {
 							// render on success
 							if (!err) {
@@ -216,17 +233,23 @@ function SearchPatient(req,res){
                   //var getUser = "select * from doctor d ,user_profile p where d.uid = p.user_id and email = '"+ input.email + "'" +" and password = '" + input.password +"'" ;
 //			
 //		console.log(req);
-				
+					//console.log(results[0].firstname);
 						mysql.fetchData(function(err, results) {
 			if (err) {
+				res.render('searchPatientError');
 				throw err;
 			} else {
+				if(results.length === 0){
+				res.render('searchPatientError');
+				}
+				
 				//var date = new Date();
 				//console.log(results[0].nextappointment);
 			}
 			if (results.length > 0) {
 				
 				console.log("valid Login");
+				if(results[0].firstname === firstnamepatientglobal){
 				ejs.renderFile('./views/PatientData.ejs', {
 					results : results
 				}, function(err, result) {
@@ -241,6 +264,8 @@ function SearchPatient(req,res){
 						res.end('An error occurred');
 					}
 				});
+					}
+					else{ res.render('searchPatientError');}
 			}
 		}, getUser);
 					}
