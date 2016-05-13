@@ -172,14 +172,18 @@
                 </label>
             </div>
  -->
- 			
+ 			   
  			  <div class="form-row">
                 <label>
                     <span>Previous Doctor Comments</span>
-                    <span name=""><%=results[0].doctorcomment%> </span>
-                </label>
+                          <span name=""><%
+                        if(results && results != null && results.length > 0 ) {
+                                for(var i=0; i < results.length; i++) {
+                                 %>
+                    <%=results[i].doctorcomment%> 
+             		<% } }  %></span>                </label>
             </div>
-            
+       
               <div class="form-row">
                 <label>
                     <span>Doctor Comments</span>
@@ -190,11 +194,16 @@
 			  <div id ="pres" class="form-row">
                 <label>
                     <span>Previous Visit Prescription</span>
-                    <span><%=results[0].prescription%> <%=results[1].prescription%></span>
-                  
+                   <!--  <span><%=results[0].prescription%> <%=results[1].prescription%> <br><%=results[3].prescription%></span> -->
+                  <span name=""><%
+                        if(results && results != null && results.length > 0 ) {
+                                for(var i=0; i < results.length; i++) {
+                                 %>
+                    <%=results[i].prescription%> 
+             		<% } }  %></span>
                 </label>
             </div>
-            
+             
             <div class="form-row">
                 <label>
                     <span >New Prescription</span>
