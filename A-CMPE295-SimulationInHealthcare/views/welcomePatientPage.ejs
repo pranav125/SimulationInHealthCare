@@ -159,7 +159,12 @@
 			  <div class="form-row">
                 <label>
                     <span>Previous Visit Prescription</span>
-                   <span><%=results[0].prescription%> </span>
+                       <span name=""><%
+                        if(results && results != null && results.length > 0 ) {
+                                for(var i=0; i < results.length; i++) {
+                                 %>
+                    <%=results[i].prescription%> 
+             		<% } }  %></span>
                 </label>
             </div>
             
