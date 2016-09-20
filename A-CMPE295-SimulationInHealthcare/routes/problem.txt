@@ -1,0 +1,229 @@
+
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+public class Schedule {
+
+	  public static void main(String[] args) 
+	  {
+	    ArrayList<Request> requests = createReqArray();
+	    ArrayList<Request> acceptedReq = new ArrayList<Request>();
+	    ArrayList<Request> rejectedReq = new ArrayList<Request>();
+	    HashMap<Integer, HashMap<String, Set<Integer>>> acceptedMap = new HashMap<Integer, HashMap<String, Set<Integer>>>();
+	    
+	    // create a empty map for location and content set
+	    HashMap<String, Set<Integer>> contentsAtLocation = new HashMap<String, Set<Integer>>();
+	    Set<Integer> topContent = new HashSet<Integer>();
+	    Set<Integer> botContent = new HashSet<Integer>();
+
+	    for (Request req : requests) 
+	    	
+	    {
+	      int start = req.getStart();// 10,12,15,13,12,25,31
+	      int end = req.getEnd();//15,18,20,18,16,30,35
+	      String location = req.getLocation();//top,top,top,top,top,top,top
+	      int contentId = req.getContentId();//10,2,3,6,2,25,25
+	      boolean isOkay = true;
+	      
+	      if(contentsAtLocation.containsKey(location))
+	  	  {
+		    	 Set<Integer> locSet =contentsAtLocation.get(location);
+		  		if(locSet.size()>=3)
+		  		{
+		  			isOkay=false;
+		  		}
+	  	  }
+	      
+	      // check for constraints
+	      for (int i = start; i <= end; i++) 
+	      {
+	    	
+	    	  // if entry for time is present
+	    	  if (acceptedMap.containsKey(i)) 
+	    	  {
+		          // get map for location
+	//	          HashMap<String, Set<Integer>> nestedMap = acceptedMap.get(i);
+	
+		          // some contents already available at given location
+		        	if(contentsAtLocation.containsKey(location))
+		      	  	{
+		        		Set<Integer> locSet =contentsAtLocation.get(location);
+			
+		      			if(locSet.contains(contentId))
+		      			{
+		      				isOkay=false;
+		      			
+		      			}
+		      	  	}
+		        }
+	        
+	      }
+
+	      // accept/reject based on above loop
+	      if (isOkay) 
+	      {
+	    	  
+	    	  for (int i = start; i <= end; i++) 
+	    	  	{
+	    		  	// if entry for time is present
+	    		  	if (acceptedMap.containsKey(i)) 
+		    		{
+		    		  		// check if location is present in the map
+				            if (contentsAtLocation.containsKey(location)) 
+				            {
+					            	Set<Integer> contents = new HashSet<Integer>();
+					              // get the set of contents with location as key
+					            	contents = contentsAtLocation.get(location);
+				
+					              // add the content id to the set
+					              contents.add(contentId);
+				
+					              // associate the content set with the location in
+					              // the map
+					              contentsAtLocation.put(location, contents);
+				
+					              // associate the map of location and set with in the
+					              // acceptedmap
+					              acceptedMap.put(i, contentsAtLocation);
+			
+				            }			            
+			              else
+			              {	// no contents yet for given location
+			            	
+				            	if(location=="top"){
+				            		topContent.add(contentId);
+				            		contentsAtLocation.put(location, topContent);
+				            	}
+				            	else if(location=="bottom"){
+				            		botContent.add(contentId);
+				            		contentsAtLocation.put(location, botContent);
+				            	}
+				            	acceptedMap.put(i, contentsAtLocation);
+			              }
+		    		}   
+	    		  	else  // no entry for this time slot yet
+	    		  	{
+		       			
+		            	if(location=="top"){
+		            		topContent.add(contentId);
+		            		contentsAtLocation.put(location, topContent);
+		            	}
+		            	else if(location=="bottom"){
+		            		botContent.add(contentId);
+		            		
+		            		// assocaite the content set with location as the
+	//	            				key in the contentsAtLocation map
+		            		contentsAtLocation.put(location, botContent);
+		            	}	              
+		              // associate the contentsAtLocation with the time as
+		              // key
+		              acceptedMap.put(i, contentsAtLocation);
+
+	    		  	}
+	         
+
+	         }
+
+	        // writeToFile(acceptedFile, req);
+	        acceptedReq.add(req);// write to file
+	      } 
+	      else 
+	      {
+
+	        // writeToFile(rejectedFile, req);
+	        rejectedReq.add(req);
+
+	      }
+
+	    }
+
+	    System.out.println("Rejected List");
+		printList(rejectedReq);
+		System.out.println("***************");
+		System.out.println("Accepted List");
+		printList(acceptedReq);
+
+	  }
+
+	  public static void writeToFile(File fileName, Request req) 
+	  {
+
+	  }
+
+	  public static void printList(ArrayList<Request> list) 
+		{
+			System.out.println("Loc"+"   "+"Con"+"  "+"Sta"+"  "+"End");
+			for (Request req : list) 
+			{			
+				System.out.println(req.getLocation()+"   "+req.getContentId()+"    "+req.getStart()+"   "+req.getEnd());
+			}
+		}
+	  
+	  public static ArrayList<Request> createReqArray() {
+		    //10,2,3,6,2,25,25
+		    ArrayList<Request> result = new ArrayList<Request>();
+		    Request req = new Request();
+		    req.setLocation("bottom");
+		    req.setStart(10);
+		    req.setEnd(20);
+		    req.setContentId(10);
+
+		    result.add(req);
+
+		    Request req1 = new Request();
+		    req1.setLocation("bottom");
+		    req1.setStart(12);
+		    req1.setEnd(13);
+		    req1.setContentId(6);
+		    result.add(req1);
+
+		    Request req2 = new Request();
+		    req2.setLocation("bottom");
+		    req2.setStart(14);
+		    req2.setEnd(15);
+		    req2.setContentId(10);
+		    result.add(req2);
+		    
+		    Request req3 = new Request();
+		    req3.setLocation("top");
+		    req3.setStart(10);
+		    req3.setEnd(19);
+		    req3.setContentId(9);
+		    result.add(req3);
+		    
+		    Request req4 = new Request();
+		    req4.setLocation("bottom");
+		    req4.setStart(10);
+		    req4.setEnd(11);
+		    req4.setContentId(9);
+		    result.add(req4);
+		    
+		   
+		    Request req5 = new Request();
+		    req5.setLocation("bottom");
+		    req5.setStart(100);
+		    req5.setEnd(111);
+		    req5.setContentId(104);
+		    result.add(req5);
+		    
+		    Request req6 = new Request();
+		    req6.setLocation("top");
+		    req6.setStart(10);
+		    req6.setEnd(11);
+		    req6.setContentId(6);
+		    result.add(req6);
+		    
+		    Request req7 = new Request();
+		    req7.setLocation("top");
+		    req7.setStart(10);
+		    req7.setEnd(11);
+		    req7.setContentId(1);
+		    result.add(req7);
+		    
+		    return result;
+		  }
+}
